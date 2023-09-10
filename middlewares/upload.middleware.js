@@ -15,11 +15,11 @@ const storage = multer.diskStorage({
 
 const fileFilter = (req, file, cb) => {
   if (
-    file.fieldname === "id_passport" &&
+    file.fieldname === "passport" &&
     !file.mimetype.match(/jpeg|jpg|png|pdf/)
   ) {
     return cb(
-      new Error("Only jpg, jpeg, and png files are allowed for id_passport!"),
+      new Error("Only jpg, jpeg, and png files are allowed for passport!"),
       false
     );
   }

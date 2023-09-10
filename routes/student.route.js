@@ -7,7 +7,7 @@ const {registerStudent , getApplicationsByApprovalStatus} = require("../controll
 router.post(
   "/register",
   upload.fields([
-    { name: "id_passport", maxCount: 1 },
+    { name: "passport", maxCount: 1 },
     { name: "transcript", maxCount: 1 },
   ]),
  registerStudent

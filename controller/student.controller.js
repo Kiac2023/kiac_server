@@ -4,67 +4,52 @@ const { Application } = require("../model/application.model");
 exports.registerStudent = async (req, res) => {
   const schema = Joi.object({
     level: Joi.string().required(),
-    finish_secondary: Joi.boolean().required(),
-    finish_university: Joi.boolean().required(),
-    secondary_level: Joi.string().required(),
-    university_level: Joi.string().required(),
-    date_of_birth: Joi.date().required(),
-    school_id: Joi.number().integer().default(94),
-    fname: Joi.string().required(),
-    lname: Joi.string().required(),
+    finish_secondary: Joi.string().required(),
+    secondaryYear: Joi.string().allow(null).default(null), // Add validation as needed
+    universityGraduated: Joi.string().required(),
+    universityYear: Joi.string().allow(null).default(null), // Add validation as needed
+    school: Joi.string().required(),
+    firstName: Joi.string().required(),
+    lastName: Joi.string().required(),
+    gender: Joi.string().valid("Male", "Female").required(),
     nationality: Joi.string().required(),
-    gender: Joi.string().valid("male", "female").required(),
+    dob: Joi.date().required(),
     phone: Joi.string().required(),
     email: Joi.string().email().required(),
     country: Joi.string().required(),
     sector: Joi.string().required(),
     district: Joi.string().required(),
-    city_relatives: Joi.string().required(),
+    familyInKigali:Joi.string().required(),
     course: Joi.string().required(),
-    id_passport: Joi.any(), // You may need more detailed validation for files
-    transcript: Joi.any(),
-    payment_method: Joi.string().required(),
-    payment_method: Joi.string()
-      .valid("cash", "credit_card", "debit_card", "online_transfer") // Add any other payment methods you accept.
-      .default("cash"),
-
+    passport: Joi.any(), // Add validation as needed
+    transcript: Joi.any(), // Add validation as needed
+    paymentMethod: Joi.string().required(),
     payment_status: Joi.boolean().default(false),
-
     approved: Joi.boolean().default(false),
-
-    program: Joi.string().valid("day", "night", "weekend").required(),
-    id_passport: Joi.string()
-      .pattern(/^uploads\/[a-zA-Z0-9_-]+\.(jpg|jpeg|png)$/)
-      .message("Invalid id_passport file path")
-      .allow(null),
-
-    transcript: Joi.string()
-      .pattern(/^uploads\/[a-zA-Z0-9_-]+\.(jpg|jpeg|png|pdf)$/)
-      .message("Invalid transcript file path")
-      .allow(null),
+    program: Joi.string().valid("Day", "Night", "Weekend").required(),
   });
 
   const { error } = schema.validate(req.body);
   if (error) {
     console.log("Validation failed:", error.details);
     return res.status(400).send(error.details);
-
   }
-
   // Access uploaded files with:
   // req.files['id_passport'][0] and req.files['transcript'][0]
   const studentData = {
     ...req.body,
-    id_passport:
-      req.files && req.files["id_passport"]
-        ? req.files["id_passport"][0].path
+    passport:
+      req.files && req.files["passport"]
+        ? req.files["passport"][0].path
         : null,
     transcript:
       req.files && req.files["transcript"]
         ? req.files["transcript"][0].path
         : null,
   };
-  //   console.log(req.files);
+  //   console.log(req.files);  
+
+ 
 
   try {
     const existingStudent = await Application.findOne({
@@ -73,10 +58,9 @@ exports.registerStudent = async (req, res) => {
       },
     });
     if (existingStudent) {
-        console.log("Blocking registration: Application with email:", req.body.email, "already exists.");
-        // ... rest of the logic
+      console.log("Blocking registration: Application with email:", req.body.email, "already exists.");
       return res.status(400).json({
-        message: "A application with this email has already applied.",
+        message: "An application with this email has already applied.",
       });
     }
 
@@ -94,27 +78,27 @@ exports.registerStudent = async (req, res) => {
   }
 };
 
-// get applications 
+// get applications
 
 exports.getApplicationsByApprovalStatus = async (req, res) => {
   const approved = req.query.approved === 'true'; // Convert the query string to a boolean
-  
+
   try {
     const applications = await Application.findAll({
       where: {
-        approved: approved
-      }
+        approved: approved,
+      },
     });
 
     if (applications.length === 0) {
       return res.status(404).json({
-        message: "No applications found with the provided approval status."
+        message: "No applications found with the provided approval status.",
       });
     }
 
     res.status(200).json({
       message: "Applications fetched successfully.",
-      applications
+      applications,
     });
   } catch (error) {
     console.error(error);
@@ -124,4 +108,3 @@ exports.getApplicationsByApprovalStatus = async (req, res) => {
     });
   }
 };
-

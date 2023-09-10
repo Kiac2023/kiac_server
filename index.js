@@ -15,6 +15,10 @@ app.use(express.json());
 app.use(cors());
 app.use("/api/students", studentRoutes);
 app.use('/api/students/uploads', express.static('uploads'));
+app.use((err, req, res, next) => {
+  console.error(err.stack); // log the error stack trace
+  res.status(500).send({error: 'Something went wrong!'});
+});
 
 // Define a route to handle document downloads
 app.get('/api/students/upload/:filename', (req, res) => {

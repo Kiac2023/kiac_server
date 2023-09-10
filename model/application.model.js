@@ -15,22 +15,19 @@ class Application extends Model {}
 Application.init(
   {
     level: DataTypes.STRING,
-    finish_secondary: DataTypes.BOOLEAN,
-    finish_university: DataTypes.BOOLEAN,
-    secondary_level: DataTypes.STRING,
-    university_level: DataTypes.STRING,
-    date_of_birth: {
+    finish_secondary: DataTypes.STRING,
+    secondaryYear: DataTypes.STRING,
+    universityGraduated: DataTypes.STRING,
+    universityYear: DataTypes.STRING,
+    school: DataTypes.STRING,
+    firstName: DataTypes.STRING,
+    lastName: DataTypes.STRING,
+    gender: DataTypes.STRING,
+    nationality: DataTypes.STRING,
+    dob: {
       type: DataTypes.DATEONLY,
       allowNull: false,
     },
-    school_id: {
-      type: DataTypes.INTEGER,
-      defaultValue: 94,
-    },
-    fname: DataTypes.STRING,
-    lname: DataTypes.STRING,
-    nationality: DataTypes.STRING,
-    gender: DataTypes.STRING,
     phone: DataTypes.STRING,
     email: {
       type: DataTypes.STRING,
@@ -38,17 +35,17 @@ Application.init(
       unique: true,
     },
     country: DataTypes.STRING,
-    sector: DataTypes.STRING,
     district: DataTypes.STRING,
-    city_relatives: DataTypes.STRING,
+    sector: DataTypes.STRING,
+    familyInKigali: DataTypes.STRING,
+    program: DataTypes.JSON(DataTypes.STRING), // Assumes this field stores an array
     course: DataTypes.STRING,
-    program: {
-      type: DataTypes.ENUM("day", "night", "weekend"),
-      allowNull: false,
-    },
-    payment_method: {
-      type: DataTypes.STRING,
-      defaultValue: "cash",
+    passport: DataTypes.STRING, // Assuming this stores the file path or URL to the uploaded file
+    transcript: DataTypes.STRING, // Assuming this stores the file path or URL to the uploaded file
+    paymentMethod: DataTypes.STRING,
+    school_id: {
+      type: DataTypes.INTEGER,
+      defaultValue: 94,
     },
     payment_status: {
       type: DataTypes.BOOLEAN,
@@ -57,14 +54,6 @@ Application.init(
     approved: {
       type: DataTypes.BOOLEAN,
       defaultValue: false,
-    },
-    id_passport: {
-      type: DataTypes.STRING,
-      allowNull: true,
-    },
-    transcript: {
-      type: DataTypes.STRING,
-      allowNull: true,
     },
   },
   {
