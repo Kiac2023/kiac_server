@@ -26,7 +26,7 @@ exports.registerStudent = async (req, res) => {
     paymentMethod: Joi.string().required(),
     payment_status: Joi.boolean().default(false),
     approved: Joi.boolean().default(false),
-    program: Joi.string().valid("Day", "Night", "Weekend").required(),
+    program: Joi.string().valid(" Day ", " Night ", " Weekend ").required(),
   });
 
   const { error } = schema.validate(req.body);
@@ -108,3 +108,40 @@ exports.getApplicationsByApprovalStatus = async (req, res) => {
     });
   }
 };
+
+// update payment 
+
+exports.updatePaymentStatusAndApproved = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const application = await Application.findOne({
+      where: {
+        id: id,
+      },
+    });
+
+    if (!application) {
+      return res.status(404).json({
+        message: "No application found with the provided ID.",
+      });
+    }
+
+    const updatedApplication = await application.update({
+      payment_status: true,
+      approved:true
+
+    });
+
+    res.status(200).json({
+      message: "Application updated successfully.",
+      application: updatedApplication,
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      message: "Error occurred",
+      details: error.message,
+    });
+  }
+}

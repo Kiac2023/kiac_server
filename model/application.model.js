@@ -31,7 +31,7 @@ Application.init(
     district: DataTypes.STRING,
     sector: DataTypes.STRING,
     familyInKigali: DataTypes.STRING,
-    program: DataTypes.JSON(DataTypes.STRING), // Assumes this field stores an array
+    program: DataTypes.STRING,
     course: DataTypes.STRING,
     passport: DataTypes.STRING, // Assuming this stores the file path or URL to the uploaded file
     transcript: DataTypes.STRING, // Assuming this stores the file path or URL to the uploaded file
