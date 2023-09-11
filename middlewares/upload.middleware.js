@@ -15,7 +15,7 @@ const storage = multer.diskStorage({
 
 const fileFilter = (req, file, cb) => {
   if (
-    file.fieldname === "passport" &&
+    file.fieldname === "passport_pic" &&
     !file.mimetype.match(/jpeg|jpg|png|pdf/)
   ) {
     return cb(
@@ -24,7 +24,25 @@ const fileFilter = (req, file, cb) => {
     );
   }
   if (
-    file.fieldname === "transcript" &&
+    file.fieldname === "vaccine" &&
+    !file.mimetype.match(/jpeg|jpg|png|pdf/)
+  ) {
+    return cb(
+      new Error("Only jpg, jpeg, and png files are allowed for vaccine!"),
+      false
+    );
+  }
+  if (
+    file.fieldname === "id_passport" &&
+    !file.mimetype.match(/jpeg|jpg|png|pdf/)
+  ) {
+    return cb(
+      new Error("Only jpg, jpeg, and png files are allowed for id_passport!"),
+      false
+    );
+  }
+  if (
+    file.fieldname === "transcript_doc" &&
     !file.mimetype.match(/jpeg|jpg|png|pdf/)
   ) {
     return cb(

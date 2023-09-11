@@ -5,6 +5,8 @@ const {sequelize} = require("./config");
 
 const studentRoutes = require("./routes/student.route");
 const  agentApplicationRouter  = require('./routes/agentApplicationRoutes');
+const  AbroadpplicationRouter  = require('./routes/abroad.route');
+
 const cors = require("cors");
 
 const app = express();
@@ -13,11 +15,12 @@ const IP_ADDRESS = process.env.IP_ADDRESS; // Specify the IP address you want to
 
 // Middlewares
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(express.urlencoded({ extended: true  , limit: '50mb'}));
 app.use(cors());
 
 app.use("/api/students", studentRoutes);
 app.use('/api/agents', agentApplicationRouter);
+app.use('/api/study/abroad',AbroadpplicationRouter);
 app.use('/api/students/uploads', express.static('uploads'));
 app.use((err, req, res, next) => {
   console.error(err.stack); // log the error stack trace
