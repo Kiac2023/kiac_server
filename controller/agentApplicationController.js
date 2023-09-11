@@ -54,3 +54,16 @@ exports.postAgentApplication = async (req, res) => {
     };
 
 
+// get applications
+exports.getAllAgentApplications = async (req, res) => {
+  try {
+      const applications = await AgentApplication.findAll();
+      return res.status(200).json(applications);
+  } catch (error) {
+      console.error(error);
+      return res.status(500).json({
+          message: "Error occurred",
+          details: error.message,
+      });
+  }
+};
