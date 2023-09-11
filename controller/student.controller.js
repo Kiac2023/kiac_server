@@ -26,7 +26,7 @@ exports.registerStudent = async (req, res) => {
     paymentMethod: Joi.string().required(),
     payment_status: Joi.boolean().default(false),
     approved: Joi.boolean().default(false),
-    program: Joi.string().valid(" Day ", " Night ", " Weekend ").required(),
+    program: Joi.string().required(),
   });
 
   const { error } = schema.validate(req.body);
