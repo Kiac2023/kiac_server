@@ -19,7 +19,7 @@ exports.registerStudent = async (req, res) => {
     country: Joi.string().required(),
     sector: Joi.string().required(),
     district: Joi.string().required(),
-    familyInKigali:Joi.string().required(),
+    familyInKigali: Joi.string().required(),
     course: Joi.string().required(),
     passport: Joi.any(), // Add validation as needed
     transcript: Joi.any(), // Add validation as needed
@@ -39,17 +39,13 @@ exports.registerStudent = async (req, res) => {
   const studentData = {
     ...req.body,
     passport:
-      req.files && req.files["passport"]
-        ? req.files["passport"][0].path
-        : null,
+      req.files && req.files["passport"] ? req.files["passport"][0].path : null,
     transcript:
       req.files && req.files["transcript"]
         ? req.files["transcript"][0].path
         : null,
   };
-  //   console.log(req.files);  
-
- 
+  //   console.log(req.files);
 
   try {
     const existingStudent = await Application.findOne({
@@ -58,7 +54,11 @@ exports.registerStudent = async (req, res) => {
       },
     });
     if (existingStudent) {
-      console.log("Blocking registration: Application with email:", req.body.email, "already exists.");
+      console.log(
+        "Blocking registration: Application with email:",
+        req.body.email,
+        "already exists."
+      );
       return res.status(400).json({
         message: "An application with this email has already applied.",
       });
@@ -81,7 +81,7 @@ exports.registerStudent = async (req, res) => {
 // get applications
 
 exports.getApplicationsByApprovalStatus = async (req, res) => {
-  const approved = req.query.approved === 'true'; // Convert the query string to a boolean
+  const approved = req.query.approved === "true"; // Convert the query string to a boolean
 
   try {
     const applications = await Application.findAll({

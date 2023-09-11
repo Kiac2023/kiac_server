@@ -1,9 +1,10 @@
 require("dotenv").config();
 const express = require("express");
-const { sequelize } = require("./model/application.model");
-const path = require("path"); // Import the path module
+
+const {sequelize} = require("./config");
 
 const studentRoutes = require("./routes/student.route");
+const  agentApplicationRouter  = require('./routes/agentApplicationRoutes');
 const cors = require("cors");
 
 const app = express();
@@ -12,8 +13,11 @@ const IP_ADDRESS = process.env.IP_ADDRESS; // Specify the IP address you want to
 
 // Middlewares
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 app.use(cors());
+
 app.use("/api/students", studentRoutes);
+app.use('/api/agents', agentApplicationRouter);
 app.use('/api/students/uploads', express.static('uploads'));
 app.use((err, req, res, next) => {
   console.error(err.stack); // log the error stack trace

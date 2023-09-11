@@ -1,8 +1,10 @@
 const express = require("express");
 const router = express.Router();
 const upload = require("../middlewares/upload.middleware");
-const {registerStudent , getApplicationsByApprovalStatus} = require("../controller/student.controller");
-
+const {
+  registerStudent,
+  getApplicationsByApprovalStatus,
+} = require("../controller/student.controller");
 
 router.post(
   "/register",
@@ -10,9 +12,9 @@ router.post(
     { name: "passport", maxCount: 1 },
     { name: "transcript", maxCount: 1 },
   ]),
- registerStudent
+  registerStudent
 );
 
-router.get('/applications', getApplicationsByApprovalStatus);
+router.get("/applications", getApplicationsByApprovalStatus);
 
 module.exports = router;
