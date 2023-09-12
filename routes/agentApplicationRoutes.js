@@ -1,4 +1,6 @@
 const express = require("express");
+const upload = require("../middlewares/upload.middleware");
+
 const {
   postAgentApplication,
   getAllAgentApplications
@@ -6,7 +8,13 @@ const {
 
 const router = express.Router();
 
-router.post("/application", postAgentApplication);
+router.post("/application",
+upload.fields([
+  { name: "transcript", maxCount: 1 },
+  { name: "passport" },
+  { name: "certificate" },
+]),
+postAgentApplication);
 router.get('/all/applications', getAllAgentApplications);
 
 

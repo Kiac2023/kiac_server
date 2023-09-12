@@ -9,8 +9,8 @@ router.post(
   upload.fields([
     { name: "passport_pic", maxCount: 1 },
     { name: "transcript_doc", maxCount: 1 },
-    { name: "id_passport" },
-    { name: "vaccine" },
+    { name: "id_passport" , maxCount:1},
+    { name: "vaccine" , maxCount:1},
   ]),
 
   StudyAbroadApplication

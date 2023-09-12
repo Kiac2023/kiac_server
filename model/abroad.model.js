@@ -59,14 +59,22 @@ AbroadApplication.init(
         isEmail: true
       }
     },
+      payment_status: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
+    },
+    approved: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
+    },
     program: {
       type: DataTypes.STRING,
       allowNull: false
     },
-    id_passport: DataTypes.BLOB,
-    passport_pic: DataTypes.BLOB,
-    vaccine: DataTypes.BLOB,
-    transcript_doc: DataTypes.BLOB,
+    id_passport: DataTypes.STRING,
+    passport_pic: DataTypes.STRING,
+    vaccine: DataTypes.STRING,
+    transcript_doc: DataTypes.STRING,
   },
 
   {

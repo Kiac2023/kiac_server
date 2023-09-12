@@ -21,12 +21,14 @@ exports.StudyAbroadApplication = async (req, res) => {
       passport_pic: Joi.any(),
       vaccine: Joi.any(),
       transcript_doc: Joi.any(),
+      payment_status: Joi.boolean().default(false),
+      approved: Joi.boolean().default(false),
     });
     // Access uploaded files with:
     // req.files['id_passport'][0] and req.files['transcript'][0]
     const studentData = {
       ...req.body,
-      passport:
+      passport_pic:
         req.files && req.files["passport"]
           ? req.files["passport"][0].path
           : null,
@@ -34,7 +36,7 @@ exports.StudyAbroadApplication = async (req, res) => {
         req.files && req.files["id_passport"]
           ? req.files["id_passport"][0].path
           : null,
-      transcript:
+      transcript_doc:
         req.files && req.files["transcript"]
           ? req.files["transcript"][0].path
           : null,
@@ -69,7 +71,7 @@ exports.StudyAbroadApplication = async (req, res) => {
       });
     }
 
-    const application = new AbroadApplication(req.body);
+    const application = new AbroadApplication(studentData);
     await application.save();
 
     res.json({
