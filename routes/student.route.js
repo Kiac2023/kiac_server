@@ -3,9 +3,7 @@ const router = express.Router();
 const upload = require("../middlewares/upload.middleware");
 const {
   registerStudent,
-  getApplicationsByApprovalStatus,
   updatePaymentStatusAndApproved,
-  deleteApplication,
   rejectApplication,
   getAllApplications,
 } = require("../controller/student.controller");

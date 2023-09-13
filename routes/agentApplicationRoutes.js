@@ -3,8 +3,9 @@ const upload = require("../middlewares/upload.middleware");
 
 const {
   postAgentApplication,
-  getAllAgentApplications,
-  rejectApplication
+  rejectApplication,
+  getApplications,
+  updatePaymentStatusAndApproved
 } = require("../controller/agentApplicationController");
 
 const router = express.Router();
@@ -16,8 +17,10 @@ upload.fields([
   { name: "certificate" },
 ]),
 postAgentApplication);
-router.get('/all/applications', getAllAgentApplications);
+router.get('/all/applications', getApplications);
 router.put("/application/:id/reject", rejectApplication)
+router.put('/application/:id/updateStatus',updatePaymentStatusAndApproved) 
+
 
 
 module.exports =  router ;

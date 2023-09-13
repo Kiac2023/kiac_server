@@ -6,9 +6,9 @@ exports.registerStudent = async (req, res) => {
     const schema = Joi.object({
       level: Joi.string().required(),
       finish_secondary: Joi.string().required(),
-      secondaryYear: Joi.string().allow(null).default(null), // Add validation as needed
+      secondaryYear: Joi.string(), // Add validation as needed
       universityGraduated: Joi.string().required(),
-      universityYear: Joi.string().allow(null).default(null), // Add validation as needed
+      universityYear: Joi.string(), // Add validation as needed
       school: Joi.string().required(),
       firstName: Joi.string().required(),
       lastName: Joi.string().required(),
@@ -91,7 +91,7 @@ exports.getAllApplications = async (req, res) => {
     const applications = await Application.findAll({
       where: {
         approved: false,
-        // status_of_application: 'pending',
+        status_of_application: "pending",
       },
     });
     return res.status(200).json(applications);
@@ -156,13 +156,13 @@ exports.rejectApplication = async (req, res) => {
     }
 
     // Validate the application data against the schema
-    const { error } = applicationSchema.validate(application);
-    if (error) {
-      return res.status(400).json({
-        message: "Validation error",
-        details: error.details.map((d) => d.message),
-      });
-    }
+    // const { error } = applicationSchema.validate(application);
+    // if (error) {
+    //   return res.status(400).json({
+    //     message: "Validation error",
+    //     details: error.details.map((d) => d.message),
+    //   });
+    // }
 
     // Update the application status to "rejected"
     application.status_of_application = "rejected";

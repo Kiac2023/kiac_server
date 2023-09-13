@@ -122,21 +122,47 @@ exports.rejectApplication = async (req, res) => {
       });
     }
 
-    // Validate the application data against the schema
-    const { error } = applicationSchema.validate(application);
-    if (error) {
-      return res.status(400).json({
-        message: "Validation error",
-        details: error.details.map((d) => d.message),
-      });
-    }
-
     // Update the application status to "rejected"
     application.status_of_application = "rejected";
     await application.save();
 
     res.status(200).json({
       message: "Application rejected successfully",
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      message: "Error occurred",
+      details: error.message,
+    });
+  }
+};
+
+
+exports.updatePaymentStatusAndApproved = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const application = await AbroadApplication.findOne({
+      where: {
+        id: id,
+      },
+    });
+
+    if (!application) {
+      return res.status(404).json({
+        message: "No application found with the provided ID.",
+      });
+    }
+
+    const updatedApplication = await application.update({
+      payment_status: true,
+      approved: true,
+    });
+
+    res.status(200).json({
+      message: "Application updated successfully.",
+      application: updatedApplication,
     });
   } catch (error) {
     console.error(error);
