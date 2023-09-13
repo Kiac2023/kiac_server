@@ -15,7 +15,7 @@ const IP_ADDRESS = process.env.IP_ADDRESS; // Specify the IP address you want to
 
 // Middlewares
 app.use(express.json());
-app.use(express.urlencoded({ extended: true  , limit: '50mb' , parameterLimit: 1000000}));
+app.use(express.urlencoded({ extended: true  , limit: '50mb'}));
 app.use(cors());
 
 app.use("/api/students", studentRoutes);

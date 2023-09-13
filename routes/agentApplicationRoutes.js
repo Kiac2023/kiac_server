@@ -3,7 +3,8 @@ const upload = require("../middlewares/upload.middleware");
 
 const {
   postAgentApplication,
-  getAllAgentApplications
+  getAllAgentApplications,
+  rejectApplication
 } = require("../controller/agentApplicationController");
 
 const router = express.Router();
@@ -16,6 +17,7 @@ upload.fields([
 ]),
 postAgentApplication);
 router.get('/all/applications', getAllAgentApplications);
+router.put("/application/:id/reject", rejectApplication)
 
 
 module.exports =  router ;

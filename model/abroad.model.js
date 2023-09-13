@@ -9,57 +9,57 @@ AbroadApplication.init(
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
-        isIn: [["University Level", "Secondary Level"]]
-      }
+        isIn: [["University Level", "Secondary Level"]],
+      },
     },
     gender: {
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
-        isIn: [["Male", "Female"]]
-      }
+        isIn: [["Male", "Female"]],
+      },
     },
     want_to_study: {
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
-        isIn: [["yes", "no"]]
-      }
+        isIn: [["yes", "no"]],
+      },
     },
     interested: {
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
-        isIn: [["YES", "NO"]]
-      }
+        isIn: [["YES", "NO"]],
+      },
     },
     desired_country: {
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
-        isIn: [["TURKEY", "ARMENIA", "AZERBAIJAN"]]
-      }
+        isIn: [["TURKEY", "ARMENIA", "AZERBAIJAN"]],
+      },
     },
     birth_date: {
       type: DataTypes.DATE,
-      allowNull: false
+      allowNull: false,
     },
     phone_number: {
       type: DataTypes.STRING(10),
       allowNull: false,
       validate: {
         isNumeric: true,
-        len: [10, 10]
-      }
+        len: [10, 10],
+      },
     },
     email_add: {
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
-        isEmail: true
-      }
+        isEmail: true,
+      },
     },
-      payment_status: {
+    payment_status: {
       type: DataTypes.BOOLEAN,
       defaultValue: false,
     },
@@ -69,12 +69,16 @@ AbroadApplication.init(
     },
     program: {
       type: DataTypes.STRING,
-      allowNull: false
+      allowNull: false,
     },
     id_passport: DataTypes.STRING,
     passport_pic: DataTypes.STRING,
     vaccine: DataTypes.STRING,
     transcript_doc: DataTypes.STRING,
+    status_of_application: {
+      type: DataTypes.STRING,
+      defaultValue: "pending",
+    },
   },
 
   {

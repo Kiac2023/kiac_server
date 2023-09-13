@@ -5,6 +5,9 @@ const {
   registerStudent,
   getApplicationsByApprovalStatus,
   updatePaymentStatusAndApproved,
+  deleteApplication,
+  rejectApplication,
+  getAllApplications,
 } = require("../controller/student.controller");
 
 router.post(
@@ -16,10 +19,11 @@ router.post(
   registerStudent
 );
 
-router.get("/applications", getApplicationsByApprovalStatus);
+router.get("/applications", getAllApplications);
 
 // updatePaymentStatusAndApproved route
 router.put('/application/:id/updateStatus',updatePaymentStatusAndApproved) 
+router.put("/application/:id/reject", rejectApplication)
 
 
 module.exports = router;

@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const upload = require("../middlewares/upload.middleware");
 
-const { StudyAbroadApplication } = require("../controller/abroad.controller");
+const { StudyAbroadApplication, rejectApplication, getAllAbroadApplications } = require("../controller/abroad.controller");
 
 router.post(
   "/application",
@@ -16,6 +16,8 @@ router.post(
   StudyAbroadApplication
 );
 
-router.get("/applications", StudyAbroadApplication);
+// router.get("/applications", StudyAbroadApplication);
+router.get("/applications", getAllAbroadApplications);
+router.put("/application" , rejectApplication )
 
 module.exports = router;

@@ -48,6 +48,10 @@ Application.init(
       type: DataTypes.BOOLEAN,
       defaultValue: false,
     },
+    status_of_application:{
+      type: DataTypes.STRING,
+      defaultValue: "pending",
+    }
   },
   {
     sequelize,

@@ -28,6 +28,7 @@ exports.registerStudent = async (req, res) => {
       payment_status: Joi.boolean().default(false),
       approved: Joi.boolean().default(false),
       program: Joi.string().required(),
+      status_of_application: Joi.string().default("pending"),
       
     });
     // Access uploaded files with:
@@ -82,27 +83,15 @@ exports.registerStudent = async (req, res) => {
 };
 
 // get applications
-
-exports.getApplicationsByApprovalStatus = async (req, res) => {
-  const approved = req.query.approved === "true"; // Convert the query string to a boolean
-
+exports.getAllApplications = async (req, res) => {
   try {
     const applications = await Application.findAll({
       where: {
-        approved: approved,
+        approved: false,
+        // status_of_application: 'pending',
       },
     });
-
-    if (applications.length === 0) {
-      return res.status(404).json({
-        message: "No applications found with the provided approval status.",
-      });
-    }
-
-    res.status(200).json({
-      message: "Applications fetched successfully.",
-      applications,
-    });
+    return res.status(200).json(applications);
   } catch (error) {
     console.error(error);
     return res.status(500).json({
@@ -111,7 +100,6 @@ exports.getApplicationsByApprovalStatus = async (req, res) => {
     });
   }
 };
-
 // update payment
 
 exports.updatePaymentStatusAndApproved = async (req, res) => {
@@ -138,6 +126,47 @@ exports.updatePaymentStatusAndApproved = async (req, res) => {
     res.status(200).json({
       message: "Application updated successfully.",
       application: updatedApplication,
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      message: "Error occurred",
+      details: error.message,
+    });
+  }
+};
+
+// delete applications
+exports.rejectApplication = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const application = await Application.findOne({
+      where: {
+        id,
+      },
+    });
+
+    if (!application) {
+      return res.status(404).json({
+        message: "Application not found",
+      });
+    }
+
+    // Validate the application data against the schema
+    const { error } = applicationSchema.validate(application);
+    if (error) {
+      return res.status(400).json({
+        message: "Validation error",
+        details: error.details.map((d) => d.message),
+      });
+    }
+
+    // Update the application status to "rejected"
+    application.status_of_application = "rejected";
+    await application.save();
+
+    res.status(200).json({
+      message: "Application rejected successfully",
     });
   } catch (error) {
     console.error(error);

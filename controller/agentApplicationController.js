@@ -30,6 +30,7 @@ exports.postAgentApplication = async (req, res) => {
       transcript: Joi.any(),
       payment_status: Joi.boolean(),
       approved: Joi.boolean(),
+      status_of_application: Joi.string().default("pending"),
     });
     const studentData = {
       ...req.body,
@@ -74,6 +75,11 @@ exports.postAgentApplication = async (req, res) => {
 
     const application = new AgentApplication(studentData);
     await application.save();
+
+    // Send a successful response back to the client
+    return res
+      .status(200)
+      .json({ success: true, message: "Application submitted successfully" });
   } catch (error) {
     console.error("Error during student registration:", error);
     return res
@@ -85,7 +91,12 @@ exports.postAgentApplication = async (req, res) => {
 // get applications
 exports.getAllAgentApplications = async (req, res) => {
   try {
-    const applications = await AgentApplication.findAll();
+    const applications = await AgentApplication.findAll({
+      where: {
+        approved: false,
+        status_of_application: "pending",
+      },
+    });
     return res.status(200).json(applications);
   } catch (error) {
     console.error(error);
@@ -96,4 +107,43 @@ exports.getAllAgentApplications = async (req, res) => {
   }
 };
 
-//
+//delete agent
+exports.rejectApplication = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const application = await AgentApplication.findOne({
+      where: {
+        id,
+      },
+    });
+
+    if (!application) {
+      return res.status(404).json({
+        message: "Application not found",
+      });
+    }
+
+    // Validate the application data against the schema
+    const { error } = applicationSchema.validate(application);
+    if (error) {
+      return res.status(400).json({
+        message: "Validation error",
+        details: error.details.map((d) => d.message),
+      });
+    }
+
+    // Update the application status to "rejected"
+    application.status_of_application = "rejected";
+    await application.save();
+
+    res.status(200).json({
+      message: "Application rejected successfully",
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      message: "Error occurred",
+      details: error.message,
+    });
+  }
+};

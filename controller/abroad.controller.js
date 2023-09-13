@@ -23,6 +23,7 @@ exports.StudyAbroadApplication = async (req, res) => {
       transcript_doc: Joi.any(),
       payment_status: Joi.boolean().default(false),
       approved: Joi.boolean().default(false),
+      status_of_application: Joi.string().default("pending"),
     });
     // Access uploaded files with:
     // req.files['id_passport'][0] and req.files['transcript'][0]
@@ -61,7 +62,7 @@ exports.StudyAbroadApplication = async (req, res) => {
 
     if (existingStudent) {
       console.log(
-        "Blocking registration: Application with email:",
+        "Blocking registration: AbroadApplication with email:",
         req.body.email_add,
         "already exists."
       );
@@ -86,52 +87,62 @@ exports.StudyAbroadApplication = async (req, res) => {
   }
 };
 
-//
-//     const applications = await Application.findAll({
-//       where: {
-//         approved,
-//       },
-//     });
-//     res.status(200).json({
-//       message: "Applications retrieved successfully",
-//       applications,
-//     });
-//   } catch (error) {
-//     console.error(error);
-//     return res.status(400).json({
-//       message: "Error occurred",
-//       details: error.message,
-//     });
-//   }
-// };
-//
-// // update application
-//
+
+exports.getAllAbroadApplications = async (req, res) => {
+  try {
+    const applications = await AbroadApplication.findAll({
+      where: {
+        approved: false,
+        status_of_application: 'pending',
+      },
+    });
+    return res.status(200).json(applications);
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      message: "Error occurred",
+      details: error.message,
+    });
+  }
+};
+
 // delete applications
-//
-// exports.deleteApplication = async (req, res) => {
-//   const { id } = req.params;
-//   try {
-//     const application = await Application.findOne({
-//       where: {
-//         id,
-//       },
-//     });
-//     if (!application) {
-//       return res.status(404).json({
-//         message: "Application not found",
-//       });
-//     }
-//     await application.destroy();
-//     res.status(200).json({
-//       message: "Application deleted successfully",
-//     });
-//   } catch (error) {
-//     console.error(error);
-//     return res.status(400).json({
-//       message: "Error occurred",
-//       details: error.message,
-//     });
-//   }
-// };
-//
+exports.rejectApplication = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const application = await AbroadApplication.findOne({
+      where: {
+        id,
+      },
+    });
+
+    if (!application) {
+      return res.status(404).json({
+        message: "Application not found",
+      });
+    }
+
+    // Validate the application data against the schema
+    const { error } = applicationSchema.validate(application);
+    if (error) {
+      return res.status(400).json({
+        message: "Validation error",
+        details: error.details.map((d) => d.message),
+      });
+    }
+
+    // Update the application status to "rejected"
+    application.status_of_application = "rejected";
+    await application.save();
+
+    res.status(200).json({
+      message: "Application rejected successfully",
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      message: "Error occurred",
+      details: error.message,
+    });
+  }
+};
