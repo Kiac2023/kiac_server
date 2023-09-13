@@ -29,7 +29,6 @@ exports.registerStudent = async (req, res) => {
       approved: Joi.boolean().default(false),
       program: Joi.string().required(),
       status_of_application: Joi.string().default("pending"),
-      
     });
     // Access uploaded files with:
     // req.files['id_passport'][0] and req.files['transcript'][0]
@@ -73,7 +72,11 @@ exports.registerStudent = async (req, res) => {
 
     const application = new Application(studentData);
     await application.save();
-    
+
+    res.json({
+      success: true,
+      message: "Your application was submitted successfully!",
+    });
   } catch (error) {
     console.error("Error during student registration:", error);
     return res
