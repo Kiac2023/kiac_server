@@ -1,51 +1,33 @@
 const Joi = require("joi");
-const { AbroadApplication } = require("../model/abroad.model");
+const { Internships } = require("../model/internship.model");
 
-exports.StudyAbroadApplication = async (req, res) => {
+exports.postPartner = async (req, res) => {
   try {
-    const schema = Joi.object({
-      names: Joi.string().required(),
-      location: Joi.string().required(),
-      university_level: Joi.string().required(),
-      gender: Joi.string().valid("Male", "Female").required(),
-      want_to_study: Joi.string().valid("yes", "no").required(),
-      interested: Joi.string().valid("YES", "NO").required(),
-      desired_country: Joi.string().required(),
-      birth_date: Joi.date().required(),
-      phone_number: Joi.string()
-        .pattern(/^\d{10}$/)
-        .required(),
-      email_add: Joi.string().email().required(),
-      program: Joi.string().required(),
-      id_passport: Joi.any(),
-      passport_pic: Joi.any(),
-      vaccine: Joi.any(),
-      transcript_doc: Joi.any(),
-      payment_status: Joi.boolean().default(false),
-      approved: Joi.boolean().default(false),
+    const createPartnerSchema = Joi.object({
+      firstName: Joi.string().required(),
+      email: Joi.string().email().required(),
+      lastName: Joi.string().required(),
+      phone: Joi.string().optional(),
+      dob: Joi.date().optional(),
+      national_id: Joi.string().optional(),
+      gender: Joi.string().valid("male", "female", "other").optional(),
+      institution: Joi.string().optional(),
+      country: Joi.string().optional(),
+      fieldOfStudy: Joi.string().optional(),
+      dts: Joi.date().optional(),
+      duration: Joi.number().optional(),
+      course: Joi.string().optional(),
+      career_plan: Joi.string().optional(),
+      objective: Joi.string().optional(),
+      expectation: Joi.string().optional(),
+      payment_status: Joi.boolean(),
+      approved: Joi.boolean(),
       status_of_application: Joi.string().default("pending"),
     });
-    // Access uploaded files with:
-    // req.files['id_passport'][0] and req.files['transcript'][0]
-    const studentData = {
-      ...req.body,
-      passport_pic:
-        req.files && req.files["passport_pic"]
-          ? req.files["passport_pic"][0].path
-          : null,
-      id_passport:
-        req.files && req.files["id_passport"]
-          ? req.files["id_passport"][0].path
-          : null,
-      transcript_doc:
-        req.files && req.files["transcript_doc"]
-          ? req.files["transcript_doc"][0].path
-          : null,
-      vaccine:
-        req.files && req.files["vaccine"] ? req.files["vaccine"][0].path : null,
-    };
 
-    const { error } = schema.validate(req.body);
+    const studentData = req.body;
+
+    const { error } = createPartnerSchema.validate(req.body);
     if (error) {
       return res.status(400).json({
         success: false,
@@ -54,16 +36,15 @@ exports.StudyAbroadApplication = async (req, res) => {
       });
     }
 
-    const existingStudent = await AbroadApplication.findOne({
+    const existingStudent = await Internships.findOne({
       where: {
-        email_add: req.body.email_add,
+        email: req.body.email,
       },
     });
-
     if (existingStudent) {
       console.log(
-        "Blocking registration: AbroadApplication with email:",
-        req.body.email_add,
+        "Blocking registration: Application with email:",
+        req.body.email,
         "already exists."
       );
       return res.status(400).json({
@@ -72,13 +53,13 @@ exports.StudyAbroadApplication = async (req, res) => {
       });
     }
 
-    const application = new AbroadApplication(studentData);
+    const application = new Internships(studentData);
     await application.save();
 
-    res.json({
-      success: true,
-      message: "Your application was submitted successfully!",
-    });
+    // Send a successful response back to the client
+    return res
+      .status(200)
+      .json({ success: true, message: "Application submitted successfully" });
   } catch (error) {
     console.error("Error during student registration:", error);
     return res
@@ -87,9 +68,10 @@ exports.StudyAbroadApplication = async (req, res) => {
   }
 };
 
-exports.getAllAbroadApplications = async (req, res) => {
+// get applications
+exports.getApplications = async (req, res) => {
   try {
-    const applications = await AbroadApplication.findAll({
+    const applications = await Internships.findAll({
       where: {
         approved: false,
         status_of_application: "pending",
@@ -105,11 +87,11 @@ exports.getAllAbroadApplications = async (req, res) => {
   }
 };
 
-// delete applications
+//delete agent
 exports.rejectApplication = async (req, res) => {
   const { id } = req.params;
   try {
-    const application = await AbroadApplication.findOne({
+    const application = await Internships.findOne({
       where: {
         id,
       },
@@ -141,7 +123,7 @@ exports.updatePaymentStatusAndApproved = async (req, res) => {
   const { id } = req.params;
 
   try {
-    const application = await AbroadApplication.findOne({
+    const application = await Internships.findOne({
       where: {
         id: id,
       },

@@ -124,6 +124,7 @@ exports.updatePaymentStatusAndApproved = async (req, res) => {
     const updatedApplication = await application.update({
       payment_status: true,
       approved: true,
+      status_of_application:"accepted"
     });
 
     res.status(200).json({

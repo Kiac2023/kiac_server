@@ -6,6 +6,7 @@ const {sequelize} = require("./config");
 const studentRoutes = require("./routes/student.route");
 const  agentApplicationRouter  = require('./routes/agentApplicationRoutes');
 const  AbroadpplicationRouter  = require('./routes/abroad.route');
+const partnerRouter = require('./routes/partner.route');
 
 const cors = require("cors");
 
@@ -20,8 +21,20 @@ app.use(cors());
 
 app.use("/api/students", studentRoutes);
 app.use('/api/agents', agentApplicationRouter);
+app.use('/api/partners', partnerRouter);
+app.use('/api/internships', partnerRouter);
 app.use('/api/study/abroad',AbroadpplicationRouter);
 app.use('/api/students/uploads', express.static('uploads'));
+app.use((err, req, res, next) => {
+  console.error(err.stack); // log the error stack trace
+  res.status(500).send({error: 'Something went wrong!'});
+});
+app.use('/api/agents/uploads', express.static('uploads'));
+app.use((err, req, res, next) => {
+  console.error(err.stack); // log the error stack trace
+  res.status(500).send({error: 'Something went wrong!'});
+});
+app.use('/api/study/abroad/uploads', express.static('uploads'));
 app.use((err, req, res, next) => {
   console.error(err.stack); // log the error stack trace
   res.status(500).send({error: 'Something went wrong!'});

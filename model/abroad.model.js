@@ -5,6 +5,14 @@ class AbroadApplication extends Model {}
 
 AbroadApplication.init(
   {
+    names:{
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    location:{
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
     university_level: {
       type: DataTypes.STRING,
       allowNull: false,
@@ -19,6 +27,7 @@ AbroadApplication.init(
         isIn: [["Male", "Female"]],
       },
     },
+
     want_to_study: {
       type: DataTypes.STRING,
       allowNull: false,
@@ -36,9 +45,6 @@ AbroadApplication.init(
     desired_country: {
       type: DataTypes.STRING,
       allowNull: false,
-      validate: {
-        isIn: [["TURKEY", "ARMENIA", "AZERBAIJAN"]],
-      },
     },
     birth_date: {
       type: DataTypes.DATE,
