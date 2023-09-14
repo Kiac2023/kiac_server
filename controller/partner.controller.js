@@ -1,5 +1,5 @@
 const Joi = require("joi");
-const { Internships } = require("../model/internship.model");
+const { Partners } = require("../model/partner.model");
 
 exports.postPartner = async (req, res) => {
   try {
@@ -36,7 +36,7 @@ exports.postPartner = async (req, res) => {
       });
     }
 
-    const existingStudent = await Internships.findOne({
+    const existingStudent = await Partners.findOne({
       where: {
         email: req.body.email,
       },
@@ -53,7 +53,7 @@ exports.postPartner = async (req, res) => {
       });
     }
 
-    const application = new Internships(studentData);
+    const application = new Partners(studentData);
     await application.save();
 
     // Send a successful response back to the client
@@ -71,7 +71,7 @@ exports.postPartner = async (req, res) => {
 // get applications
 exports.getApplications = async (req, res) => {
   try {
-    const applications = await Internships.findAll({
+    const applications = await Partners.findAll({
       where: {
         approved: false,
         status_of_application: "pending",
@@ -91,7 +91,7 @@ exports.getApplications = async (req, res) => {
 exports.rejectApplication = async (req, res) => {
   const { id } = req.params;
   try {
-    const application = await Internships.findOne({
+    const application = await Partners.findOne({
       where: {
         id,
       },
@@ -123,7 +123,7 @@ exports.updatePaymentStatusAndApproved = async (req, res) => {
   const { id } = req.params;
 
   try {
-    const application = await Internships.findOne({
+    const application = await Partners.findOne({
       where: {
         id: id,
       },
