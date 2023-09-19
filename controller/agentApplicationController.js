@@ -1,6 +1,7 @@
 const Joi = require("joi");
 const { AgentApplication } = require("../model/AgentApplication");
-
+// const { default: fetch } = require("node-fetch");
+// const fetch = require("node-fetch");
 exports.postAgentApplication = async (req, res) => {
   try {
     const agentApplicationSchema = Joi.object({
@@ -139,9 +140,9 @@ exports.rejectApplication = async (req, res) => {
   }
 };
 
-
 exports.updatePaymentStatusAndApproved = async (req, res) => {
   const { id } = req.params;
+  console.log(id);
 
   try {
     const application = await AgentApplication.findOne({
@@ -155,16 +156,31 @@ exports.updatePaymentStatusAndApproved = async (req, res) => {
         message: "No application found with the provided ID.",
       });
     }
-
+    const fullName = application.names;
+    const nameParts = fullName.split(" ");
+    const agentData = {
+      fname: nameParts[0],
+      lname: nameParts.slice(1).join(" "),
+      email: application.email_address,
+      phone: application.telephone,
+      privilege: 8,
+      country: application.country,
+      city: application.province,
+      address: application.district,
+      shift: 7,
+    };
+    // console.log(application);
+    // const updatedApplication =
     const updatedApplication = await application.update({
       payment_status: true,
       approved: true,
-      status_of_application:"accepted"
+      status_of_application: "accepted",
     });
-
+    console.log(updatedApplication);
     res.status(200).json({
       message: "Application updated successfully.",
       application: updatedApplication,
+      agent: agentData,
     });
   } catch (error) {
     console.error(error);
@@ -174,4 +190,3 @@ exports.updatePaymentStatusAndApproved = async (req, res) => {
     });
   }
 };
-

@@ -39,4 +39,4 @@ Partner.init(
   }
 );
 
-module.exports = {Partner};
+module.exports = { Partner };

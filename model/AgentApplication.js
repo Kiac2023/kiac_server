@@ -11,8 +11,8 @@ AgentApplication.init(
       allowNull: false,
       validate: {
         isNumeric: true,
-        len: [10, 10]
-      }
+        len: [10, 10],
+      },
     },
     email_address: {
       type: DataTypes.STRING,
@@ -36,8 +36,8 @@ AgentApplication.init(
     passport: DataTypes.STRING,
     certificate: DataTypes.STRING,
     transcript: DataTypes.STRING,
-    status:DataTypes.STRING,
-    occupation:DataTypes.STRING,
+    status: DataTypes.STRING,
+    occupation: DataTypes.STRING,
     payment_status: {
       type: DataTypes.BOOLEAN,
       defaultValue: false,
@@ -46,10 +46,10 @@ AgentApplication.init(
       type: DataTypes.BOOLEAN,
       defaultValue: false,
     },
-    status_of_application:{
+    status_of_application: {
       type: DataTypes.STRING,
       defaultValue: "pending",
-    }
+    },
   },
   {
     sequelize,

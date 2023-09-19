@@ -1,9 +1,9 @@
 const Joi = require("joi");
-const { Partners } = require("../model/partner.model");
+const { Partner } = require("../model/partner.model");
 
 exports.postPartner = async (req, res) => {
   try {
-    const createPartnerSchema = Joi.object({
+    const createPartnerchema = Joi.object({
       firstName: Joi.string().required(),
       email: Joi.string().email().required(),
       lastName: Joi.string().required(),
@@ -27,7 +27,7 @@ exports.postPartner = async (req, res) => {
 
     const studentData = req.body;
 
-    const { error } = createPartnerSchema.validate(req.body);
+    const { error } = createPartnerchema.validate(req.body);
     if (error) {
       return res.status(400).json({
         success: false,
@@ -36,7 +36,7 @@ exports.postPartner = async (req, res) => {
       });
     }
 
-    const existingStudent = await Partners.findOne({
+    const existingStudent = await Partner.findOne({
       where: {
         email: req.body.email,
       },
@@ -53,7 +53,7 @@ exports.postPartner = async (req, res) => {
       });
     }
 
-    const application = new Partners(studentData);
+    const application = new Partner(studentData);
     await application.save();
 
     // Send a successful response back to the client
@@ -71,7 +71,7 @@ exports.postPartner = async (req, res) => {
 // get applications
 exports.getApplications = async (req, res) => {
   try {
-    const applications = await Partners.findAll({
+    const applications = await Partner.findAll({
       where: {
         approved: false,
         status_of_application: "pending",
@@ -91,7 +91,7 @@ exports.getApplications = async (req, res) => {
 exports.rejectApplication = async (req, res) => {
   const { id } = req.params;
   try {
-    const application = await Partners.findOne({
+    const application = await Partner.findOne({
       where: {
         id,
       },
@@ -123,7 +123,7 @@ exports.updatePaymentStatusAndApproved = async (req, res) => {
   const { id } = req.params;
 
   try {
-    const application = await Partners.findOne({
+    const application = await Partner.findOne({
       where: {
         id: id,
       },
@@ -141,9 +141,23 @@ exports.updatePaymentStatusAndApproved = async (req, res) => {
       status_of_application: "accepted",
     });
 
+    const fullName = application.names;
+    const nameParts = fullName.split(" ");
+    const agentData = {
+      fname: nameParts[0],
+      lname: nameParts.slice(1).join(" "),
+      email: application.email,
+      phone: application.phone_number,
+      privilege: 19,
+      country: application.state,
+      city: application.province,
+      address: application.street,
+      shift: 7,
+    };
     res.status(200).json({
       message: "Application updated successfully.",
       application: updatedApplication,
+      agent: agentData,
     });
   } catch (error) {
     console.error(error);

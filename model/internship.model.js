@@ -5,9 +5,9 @@ class Internships extends Model {}
 
 Internships.init(
   {
-    firstName:DataTypes.STRING,
+    firstName: DataTypes.STRING,
     email: DataTypes.STRING,
-    lastName:DataTypes.STRING,
+    lastName: DataTypes.STRING,
     phone: DataTypes.STRING,
     dob: {
       type: DataTypes.DATEONLY,

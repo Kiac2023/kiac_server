@@ -5,11 +5,11 @@ class AbroadApplication extends Model {}
 
 AbroadApplication.init(
   {
-    names:{
+    names: {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    location:{
+    location: {
       type: DataTypes.STRING,
       allowNull: false,
     },
@@ -45,6 +45,10 @@ AbroadApplication.init(
     desired_country: {
       type: DataTypes.STRING,
       allowNull: false,
+    },
+    nationality: {
+      type: DataTypes.STRING,
+      allowNull: true,
     },
     birth_date: {
       type: DataTypes.DATE,

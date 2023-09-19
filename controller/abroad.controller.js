@@ -158,10 +158,24 @@ exports.updatePaymentStatusAndApproved = async (req, res) => {
       approved: true,
       status_of_application: "accepted",
     });
-
+    console.log(application);
+    const fullName = application.names;
+    const nameParts = fullName.split(" ");
+    const agentData = {
+      fname: nameParts[0],
+      lname: nameParts.slice(1).join(" "),
+      email: application.email_add,
+      phone: application.phone_number,
+      privilege: 18,
+      country: application.nationality,
+      city: application.province,
+      address: application.district,
+      shift: 7,
+    };
     res.status(200).json({
       message: "Application updated successfully.",
       application: updatedApplication,
+      agent: agentData,
     });
   } catch (error) {
     console.error(error);

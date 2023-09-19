@@ -141,6 +141,7 @@ exports.updatePaymentStatusAndApproved = async (req, res) => {
     res.status(200).json({
       message: "Application updated successfully.",
       application: updatedApplication,
+      agent: application,
     });
   } catch (error) {
     console.error(error);
