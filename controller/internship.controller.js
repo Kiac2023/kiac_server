@@ -4,20 +4,22 @@ const { Internships } = require("../model/internship.model");
 exports.postInternship = async (req, res) => {
   try {
     const createInternshipSchema = Joi.object({
-      names: Joi.string().required(),
+      firstName: Joi.string().required(),
       email: Joi.string().email().required().email(),
-      code: Joi.string().required(),
-      phone_number: Joi.string().required(),
-      heard_us: Joi.string().required(),
-      company: Joi.string().required(),
-      business: Joi.string().required(),
-      street: Joi.string().required(),
-      addressline: Joi.string(),
-      city: Joi.string().required(),
-      state: Joi.string().required(),
-      zip_code: Joi.string(),
-      website: Joi.string(),
-      status: Joi.string().required(),
+      lastName: Joi.string().required(),
+      phone: Joi.string().required(),
+      national_id: Joi.string().required(),
+      dob: Joi.date().required(),
+      gender: Joi.string().required(),
+      institution: Joi.string().required(),
+      country: Joi.string(),
+      fieldOfStudy: Joi.string().required(),
+      dts: Joi.string().required(),
+      duration: Joi.string(),
+      career_plan: Joi.string(),
+      course: Joi.string().required(),
+      objective: Joi.string().required(),
+      expectation: Joi.string().required(),
       payment_status: Joi.boolean(),
       approved: Joi.boolean(),
       status_of_application: Joi.string().default("pending"),
@@ -26,6 +28,7 @@ exports.postInternship = async (req, res) => {
 
     const { error } = createInternshipSchema.validate(req.body);
     if (error) {
+      console.log(error);
       return res.status(400).json({
         success: false,
         error: "Invalid or Already used Data Given.",

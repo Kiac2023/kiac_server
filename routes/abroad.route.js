@@ -21,7 +21,7 @@ router.post(
   StudyAbroadApplication
 );
 
-// router.get("/applications", StudyAbroadApplication);
+//router.get("/application", StudyAbroadApplication);
 router.get("/applications", getAllAbroadApplications);
 router.put("/application/:id/reject", rejectApplication);
 router.put("/application/:id/updateStatus", updatePaymentStatusAndApproved);

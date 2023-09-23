@@ -4,22 +4,23 @@ const { Partner } = require("../model/partner.model");
 exports.postPartner = async (req, res) => {
   try {
     const createPartnerchema = Joi.object({
-      firstName: Joi.string().required(),
+      names: Joi.string().required(),
       email: Joi.string().email().required(),
-      lastName: Joi.string().required(),
-      phone: Joi.string().optional(),
-      dob: Joi.date().optional(),
-      national_id: Joi.string().optional(),
-      gender: Joi.string().valid("male", "female", "other").optional(),
-      institution: Joi.string().optional(),
-      country: Joi.string().optional(),
-      fieldOfStudy: Joi.string().optional(),
-      dts: Joi.date().optional(),
-      duration: Joi.number().optional(),
-      course: Joi.string().optional(),
-      career_plan: Joi.string().optional(),
-      objective: Joi.string().optional(),
-      expectation: Joi.string().optional(),
+      code: Joi.string().required(),
+      phone_number: Joi.string().required(),
+      // dob: Joi.date().optional(),
+      heard_us: Joi.string().optional(),
+      //gender: Joi.string().valid("male", "female", "other").optional(),
+      company: Joi.string().optional(),
+      business: Joi.string().optional(),
+      street: Joi.string().optional(),
+      addressline: Joi.string().optional(),
+      city: Joi.string().optional(),
+      state: Joi.string().optional(),
+      zip_code: Joi.string().optional(),
+      website: Joi.string().optional(),
+      status: Joi.string().optional(),
+      //expectation: Joi.string().optional(),
       payment_status: Joi.boolean(),
       approved: Joi.boolean(),
       status_of_application: Joi.string().default("pending"),
@@ -29,6 +30,7 @@ exports.postPartner = async (req, res) => {
 
     const { error } = createPartnerchema.validate(req.body);
     if (error) {
+      console.log(error);
       return res.status(400).json({
         success: false,
         error: "Invalid or Already used Data Given.",

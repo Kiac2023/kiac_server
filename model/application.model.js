@@ -1,7 +1,5 @@
 const { Sequelize, DataTypes, Model } = require("sequelize");
-const {sequelize} = require("../config");
-
-
+const { sequelize } = require("../config");
 
 class Application extends Model {}
 
@@ -9,9 +7,15 @@ Application.init(
   {
     level: DataTypes.STRING,
     finish_secondary: DataTypes.STRING,
-    secondaryYear: DataTypes.STRING,
+    secondaryYear: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
     universityGraduated: DataTypes.STRING,
-    universityYear: DataTypes.STRING,
+    universityYear: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
     school: DataTypes.STRING,
     firstName: DataTypes.STRING,
     lastName: DataTypes.STRING,
@@ -48,10 +52,10 @@ Application.init(
       type: DataTypes.BOOLEAN,
       defaultValue: false,
     },
-    status_of_application:{
+    status_of_application: {
       type: DataTypes.STRING,
       defaultValue: "pending",
-    }
+    },
   },
   {
     sequelize,

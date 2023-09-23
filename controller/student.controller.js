@@ -6,9 +6,9 @@ exports.registerStudent = async (req, res) => {
     const schema = Joi.object({
       level: Joi.string().required(),
       finish_secondary: Joi.string().required(),
-      secondaryYear: Joi.string(), // Add validation as needed
+      secondaryYear: Joi.string().allow("").optional(), // Add validation as needed
       universityGraduated: Joi.string().required(),
-      universityYear: Joi.string(), // Add validation as needed
+      universityYear: Joi.string().allow("").optional(), // Add validation as needed
       school: Joi.string().required(),
       firstName: Joi.string().required(),
       lastName: Joi.string().required(),
@@ -45,9 +45,11 @@ exports.registerStudent = async (req, res) => {
     };
     const { error } = schema.validate(req.body);
     if (error) {
+      console.log(error);
       return res.status(400).json({
         success: false,
-        error: "Invalid or Already used Data Given.",
+        error:
+          "Invalid or Already used Data Given.Check file size not exceed 100kb",
         errors: error.details,
       });
     }
@@ -81,7 +83,7 @@ exports.registerStudent = async (req, res) => {
     console.error("Error during student registration:", error);
     return res
       .status(500)
-      .json({ success: false, message: "Internal server error" });
+      .json({ success: false, message: "Internal server error", error: error });
   }
 };
 
@@ -120,16 +122,35 @@ exports.updatePaymentStatusAndApproved = async (req, res) => {
         message: "No application found with the provided ID.",
       });
     }
-
+    const fullName = application.names;
+    // const nameParts = fullName.split(" ");
+    const agentData = {
+      fname: application.firstName,
+      lname: application.lastName,
+      email: application.email,
+      phone: application.phone,
+      privilege: 20,
+      country: application.country,
+      city: application.district,
+      address: application.sector,
+      shift: 7,
+      course: application.course,
+      dob: application.dob,
+      district: application.district,
+      sector: application.sector,
+      program: application.program,
+      sex: application.gender,
+    };
     const updatedApplication = await application.update({
       payment_status: true,
       approved: true,
-      status_of_application:"accepted"
+      status_of_application: "accepted",
     });
 
     res.status(200).json({
       message: "Application updated successfully.",
       application: updatedApplication,
+      agent: agentData,
     });
   } catch (error) {
     console.error(error);
